@@ -50,7 +50,7 @@ public class UserServiceImpl implements UserService {
     public UserEntity taskReservation(TaskEntity taskEntity, UserEntity userEntity) throws  NotFoundEntityException {
         if(!userRepo.findById(userEntity.getUserId()).isPresent())
             throw new NotFoundEntityException("Id Invalide", "L'objet n'existe pas", "");
-        System.out.println(userEntity.getUserName());
+        System.out.println(taskEntity.getImageURL());
         userEntity.getReservedTask().add(taskEntity);
         return userRepo.save(userEntity);
     }

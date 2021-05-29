@@ -65,7 +65,8 @@ public class UserController {
     public ResponseEntity<Object> taskReservation(@RequestBody @Valid UserEntity userEntity, @PathVariable long taskId){
         try{
             TaskEntity task = taskService.getById(taskId);
-            return new ResponseEntity<>(userService.taskReservation(task, userEntity), HttpStatus.OK);
+            UserEntity user = userService.getById(userEntity.getUserId());
+            return new ResponseEntity<>(userService.taskReservation(task, user), HttpStatus.OK);
         }catch (NotFoundEntityException e){
             e.getErrorDto().setStatus(400);
             e.getErrorDto().setPath("/reservation/"+taskId);
