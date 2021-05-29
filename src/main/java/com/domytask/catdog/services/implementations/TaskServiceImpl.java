@@ -71,12 +71,14 @@ public class TaskServiceImpl implements TaskService {
 
     @Override
     public List<TaskEntity> all() throws NotFoundEntityException {
-        return null;
+        return taskRepo.findAll();
     }
 
     @Override
     public void delete(Long userId) throws NotFoundEntityException {
-
+        if(!taskRepo.findById(userId).isPresent())
+            throw new NotFoundEntityException("Id invalide", "L'objet n'existe pas", "");
+        taskRepo.deleteById(userId);
     }
 
     public int getRandomNumber(int min, int max) {
