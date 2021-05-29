@@ -2,16 +2,21 @@ package com.domytask.catdog.entities.enums;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
 import com.fasterxml.jackson.databind.JsonNode;
 
 @JsonFormat(shape = JsonFormat.Shape.OBJECT)
 public enum PetsEnum {
 
-    DOG("Dog"), CAT("Cat");
+    @JsonProperty("Dog")
+    DOG("Dog"),
+    @JsonProperty("Cat")
+    CAT("Cat");
 
     private String name;
 
+    @JsonCreator
     private PetsEnum(String name) {
         this.name = name;
     }
@@ -29,7 +34,6 @@ public enum PetsEnum {
         return name;
     }
 
-    @JsonCreator
     public static PetsEnum fromValue(final JsonNode jsonNode) {
 
         for (PetsEnum type : PetsEnum.values()) {

@@ -8,6 +8,7 @@ import com.domytask.catdog.repositories.TaskRepository;
 import com.domytask.catdog.repositories.WalletRepository;
 import com.domytask.catdog.services.TaskService;
 import com.domytask.catdog.services.exceptions.InvalidEntityToPersistException;
+import com.domytask.catdog.services.exceptions.NotAuthorizeActionException;
 import com.domytask.catdog.services.exceptions.NotFoundEntityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,9 +21,6 @@ public class TaskServiceImpl implements TaskService {
     @Autowired
     TaskRepository taskRepo;
 
-    @Autowired
-    WalletRepository walletRepo;
-
     String localization = "TaskImplementation";
     
     @Override
@@ -30,6 +28,7 @@ public class TaskServiceImpl implements TaskService {
         if (taskEntity.getTaskId() != null)
             throw new InvalidEntityToPersistException("Id Invalid", "Une adresse avec cet ID existe déjà", localization+" + save");
         taskEntity.setStatus(StatusEnum.TODO);
+        taskEntity.setTaskStage(TaskStageEnum.TWO);
         taskRepo.save(taskEntity);
     }
 
@@ -40,21 +39,35 @@ public class TaskServiceImpl implements TaskService {
         return taskRepo.save(taskEntity);
     }
 
-    public TaskEntity taskFulfilment(TaskEntity taskEntity) throws  NotFoundEntityException {
-        if (!taskRepo.findById(taskEntity.getTaskId()).isPresent())
-            throw new NotFoundEntityException("Id Invalide", "L'object n'existe pas", "");
-        int getReview = getRandomNumber(1,3);
-        UserEntity doer = taskEntity.getTaskDoers().get(0);
-        if (getReview == 3){
+    @Override
+    public TaskEntity taskFulfilment(TaskEntity taskEntity, UserEntity userEntity) throws NotFoundEntityException, NotAuthorizeActionException {
+        /*if (taskEntity.getTaskDoers().get(0).getUserId() != userId )
+            throw new NotAuthorizeActionException("Utilisateur non authorisé", "L'utilisateur n'est pas authorisé a effectué cette action", "");
+
+         */
+        System.out.println(userEntity.getWallet());
+        if(!taskEntity.getStatus().equals(StatusEnum.TODO)){
+            throw new NotAuthorizeActionException("Action interdite", "La tache a déjà été effectuée", "");
+        }
+        int getReview = getRandomNumber(0,3);
+        if (getReview == 2){
             taskEntity.setAvailable(true);
-            taskEntity.setReview(true);
             taskEntity.setStatus(StatusEnum.HOLD);
-            taskEntity.setTaskStage(TaskStageEnum.TWO);
-            doer.getWallet().setOnHold(taskEntity.getReward());
+            if(userEntity.getWallet().getOnHold() == null){
+                userEntity.getWallet().setOnHold(taskEntity.getReward());
+            }else {
+                userEntity.getWallet().setOnHold(userEntity.getWallet().getOnHold() + taskEntity.getReward());
+            }
         } else {
             taskEntity.setStatus(StatusEnum.RELEASE);
-            doer.getWallet().setAvailableBalance(taskEntity.getReward());
+            if(userEntity.getWallet().getAvailableBalance()==null){
+                userEntity.getWallet().setAvailableBalance(taskEntity.getReward());
+            }else {
+                userEntity.getWallet().setAvailableBalance(userEntity.getWallet().getAvailableBalance() + taskEntity.getReward());
+            }
         }
+        taskEntity.setTaskStage(TaskStageEnum.TWO);
+        taskEntity.setReview(false);
         return taskRepo.save(taskEntity);
     }
 
@@ -65,7 +78,7 @@ public class TaskServiceImpl implements TaskService {
     @Override
     public TaskEntity getById(Long userId) throws NotFoundEntityException {
         if(!taskRepo.findById(userId).isPresent())
-            throw new NotFoundEntityException("Id invalide", "L'objet n'existe pas", "");
+            throw new NotFoundEntityException("Id invalide", "La tache n'existe pas", "");
         return taskRepo.findById(userId).get();
     }
 
@@ -81,6 +94,12 @@ public class TaskServiceImpl implements TaskService {
         taskRepo.deleteById(userId);
     }
 
+    /**
+     * Return a random number in a range between min and max value
+     * @param min
+     * @param max
+     * @return
+     */
     public int getRandomNumber(int min, int max) {
         return (int) ((Math.random() * (max - min)) + min);
     }

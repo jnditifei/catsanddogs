@@ -6,6 +6,7 @@ import com.domytask.catdog.entities.enums.RoleEnum;
 import com.domytask.catdog.services.TaskService;
 import com.domytask.catdog.services.UserService;
 import com.domytask.catdog.services.exceptions.InvalidEntityToPersistException;
+import com.domytask.catdog.services.exceptions.NotAuthorizeActionException;
 import com.domytask.catdog.services.exceptions.NotFoundEntityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -69,6 +70,10 @@ public class UserController {
             return new ResponseEntity<>(userService.taskReservation(task, user), HttpStatus.OK);
         }catch (NotFoundEntityException e){
             e.getErrorDto().setStatus(400);
+            e.getErrorDto().setPath("/reservation/"+taskId);
+            return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
+        }catch (NotAuthorizeActionException e){
+            e.getErrorDto().setStatus(403);
             e.getErrorDto().setPath("/reservation/"+taskId);
             return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
         }

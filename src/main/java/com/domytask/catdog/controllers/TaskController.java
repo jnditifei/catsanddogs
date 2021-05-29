@@ -1,8 +1,11 @@
 package com.domytask.catdog.controllers;
 
 import com.domytask.catdog.entities.TaskEntity;
+import com.domytask.catdog.entities.UserEntity;
 import com.domytask.catdog.services.TaskService;
+import com.domytask.catdog.services.UserService;
 import com.domytask.catdog.services.exceptions.InvalidEntityToPersistException;
+import com.domytask.catdog.services.exceptions.NotAuthorizeActionException;
 import com.domytask.catdog.services.exceptions.NotFoundEntityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,6 +21,9 @@ public class TaskController {
     @Autowired
     TaskService taskService;
 
+    @Autowired
+    UserService userService;
+
     @RequestMapping(value = "/create")
     public ResponseEntity<Object> create(@RequestBody @Valid TaskEntity taskEntity){
         try{
@@ -30,13 +36,31 @@ public class TaskController {
         }
     }
 
-    @RequestMapping(value = "update", method = RequestMethod.PUT)
-    public  ResponseEntity<Object> update(@RequestBody @Valid TaskEntity taskEntity){
+    @RequestMapping(value = "/update", method = RequestMethod.PUT)
+    public ResponseEntity<Object> update(@RequestBody @Valid TaskEntity taskEntity){
         try{
             return new ResponseEntity<>(taskService.update(taskEntity), HttpStatus.CREATED);
         }catch(NotFoundEntityException e){
             e.getErrorDto().setStatus(400);
             e.getErrorDto().setPath("/update");
+            return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/{userId}/evaluation", method = RequestMethod.PUT)
+    public ResponseEntity<Object> taskFulfilment(@RequestBody @Valid TaskEntity taskEntity, @PathVariable long userId){
+        try{
+            UserEntity user = userService.getById(userId);
+            TaskEntity task = taskService.getById(taskEntity.getTaskId());
+            task.setAnswer(taskEntity.getAnswer());
+            return new ResponseEntity<>(taskService.taskFulfilment(task, user), HttpStatus.OK);
+        }catch (NotFoundEntityException e){
+            e.getErrorDto().setStatus(400);
+            e.getErrorDto().setPath(userId+"/evaluation");
+            return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
+        }catch (NotAuthorizeActionException e){
+            e.getErrorDto().setStatus(401);
+            e.getErrorDto().setPath(userId+"/evaluation");
             return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
         }
     }

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Value;
 
 import javax.persistence.*;
 
@@ -19,8 +20,10 @@ public class WalletEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long walletId;
 
+    @Value("${availableBalance:0.00}")
     private Float availableBalance;
 
+    @Value("${onHold:0.00}")
     private Float onHold;
 
     @OneToOne(mappedBy = "wallet")
