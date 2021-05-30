@@ -11,9 +11,6 @@ import java.util.Optional;
 
 @Repository
 public interface TaskRepository extends JpaRepository<TaskEntity, Long> {
-    Optional<TaskEntity> findByAvailable(boolean available);
 
     List<TaskEntity> findAllByAvailableAndTaskStage(boolean available, TaskStageEnum taskStage);
-
-    Optional<TaskEntity> findByStatus(StatusEnum status);
 }
