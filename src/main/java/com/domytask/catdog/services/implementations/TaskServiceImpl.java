@@ -24,12 +24,12 @@ public class TaskServiceImpl implements TaskService {
     String localization = "TaskImplementation";
     
     @Override
-    public void save(TaskEntity taskEntity) throws InvalidEntityToPersistException {
+    public TaskEntity save(TaskEntity taskEntity) throws InvalidEntityToPersistException {
         if (taskEntity.getTaskId() != null)
             throw new InvalidEntityToPersistException("Id Invalid", "Une adresse avec cet ID existe déjà", localization+" + save");
         taskEntity.setStatus(StatusEnum.TODO);
         taskEntity.setTaskStage(TaskStageEnum.ONE);
-        taskRepo.save(taskEntity);
+        return taskRepo.save(taskEntity);
     }
 
     @Override

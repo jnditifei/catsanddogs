@@ -41,7 +41,7 @@ public class TaskController {
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public ResponseEntity<Object> update(@RequestBody TaskEntity taskEntity){
         try{
-            return new ResponseEntity<>(taskService.update(taskEntity), HttpStatus.CREATED);
+            return new ResponseEntity<>(taskService.update(taskEntity), HttpStatus.OK);
         }catch(NotFoundEntityException e){
             e.getErrorDto().setStatus(400);
             e.getErrorDto().setPath("/update");

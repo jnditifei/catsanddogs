@@ -5,7 +5,6 @@ import com.domytask.catdog.entities.UserEntity;
 import com.domytask.catdog.entities.WalletEntity;
 import com.domytask.catdog.entities.enums.RoleEnum;
 import com.domytask.catdog.entities.enums.TaskStageEnum;
-import com.domytask.catdog.repositories.TaskRepository;
 import com.domytask.catdog.repositories.UserRepository;
 import com.domytask.catdog.repositories.WalletRepository;
 import com.domytask.catdog.services.UserService;
@@ -29,7 +28,7 @@ public class UserServiceImpl implements UserService {
     String localisation = "userImpl";
 
     @Override
-    public void save(UserEntity userEntity) throws InvalidEntityToPersistException {
+    public UserEntity save(UserEntity userEntity) throws InvalidEntityToPersistException {
         if(userEntity.getUserId() != null)
             throw new InvalidEntityToPersistException("Id invalide", "Un compte avec cet ID existe déjà", localisation+"save");
         else if (userRepo.findByEmail(userEntity.getEmail()).isPresent())
@@ -38,7 +37,7 @@ public class UserServiceImpl implements UserService {
             WalletEntity myWallet = new WalletEntity();
             userEntity.setWallet(myWallet);
             walletRepo.save(myWallet);
-            userRepo.save(userEntity);
+            return userRepo.save(userEntity);
         }
     }
 
@@ -78,7 +77,6 @@ public class UserServiceImpl implements UserService {
     public void delete(Long userId) throws NotFoundEntityException {
         if(!userRepo.findById(userId).isPresent())
             throw new NotFoundEntityException("Aucun objet","Aucun objet n'a encore été créé dans la base de donnée", localisation+"delete");
-        UserEntity deleteBuyer = userRepo.findById(userId).get();
-        userRepo.delete(deleteBuyer);
+        userRepo.deleteById(userId);
     }
 }

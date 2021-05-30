@@ -17,7 +17,8 @@ public class WalletServiceImpl implements WalletService {
     WalletRepository walletRepo;
 
     @Override
-    public void save(WalletEntity walletEntity) throws InvalidEntityToPersistException {
+    public WalletEntity save(WalletEntity walletEntity) throws InvalidEntityToPersistException {
+        return  null;
     }
 
     @Override

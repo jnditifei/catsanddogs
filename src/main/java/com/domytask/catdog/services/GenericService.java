@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface GenericService<Entity, ID> {
 
-    void save(Entity entity) throws InvalidEntityToPersistException;
+    Entity save(Entity entity) throws InvalidEntityToPersistException;
     Entity update(Entity entity) throws NotFoundEntityException;
     Entity getById(ID userId) throws  NotFoundEntityException;
     List<Entity> all() throws NotFoundEntityException;
