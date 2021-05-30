@@ -14,6 +14,7 @@ import com.domytask.catdog.services.exceptions.NotFoundEntityException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -39,6 +40,14 @@ public class UserServiceImpl implements UserService {
             walletRepo.save(myWallet);
             return userRepo.save(userEntity);
         }
+    }
+
+    @Override
+    public UserEntity login(String email, String password) throws NotFoundEntityException {
+        if(userRepo.findByEmailAndPassword(email, password)==null)
+            throw new NotFoundEntityException("Email ou mot de passe invalide","","");
+        UserEntity user = userRepo.findByEmailAndPassword(email, password);
+        return user;
     }
 
     @Override

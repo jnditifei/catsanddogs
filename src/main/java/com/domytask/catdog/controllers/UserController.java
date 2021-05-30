@@ -13,6 +13,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpServletResponseWrapper;
 import javax.validation.Valid;
 
 @RestController
@@ -47,6 +50,22 @@ public class UserController {
         }catch (InvalidEntityToPersistException e){
             e.getErrorDto().setStatus(400);
             e.getErrorDto().setPath("/register");
+            return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    public ResponseEntity<Object> loginController(@RequestBody UserEntity user,
+                                                  HttpServletResponse response){
+        try{
+            UserEntity found = userService.login(user.getEmail(), user.getPassword());
+            Cookie cookie = new Cookie(found.getUserName(), found.getEmail());
+            cookie.setSecure(true);
+            cookie.setHttpOnly(true);
+            cookie.setPath("/");
+            response.addCookie(cookie);
+            return new ResponseEntity<>(found, HttpStatus.OK);
+        }catch (NotFoundEntityException e){
             return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
         }
     }
