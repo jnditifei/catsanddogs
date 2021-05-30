@@ -2,10 +2,10 @@ package com.domytask.catdog.services.implementations;
 
 import com.domytask.catdog.entities.TaskEntity;
 import com.domytask.catdog.entities.UserEntity;
+import com.domytask.catdog.entities.WalletEntity;
 import com.domytask.catdog.entities.enums.StatusEnum;
 import com.domytask.catdog.entities.enums.TaskStageEnum;
 import com.domytask.catdog.repositories.TaskRepository;
-import com.domytask.catdog.repositories.WalletRepository;
 import com.domytask.catdog.services.TaskService;
 import com.domytask.catdog.services.exceptions.InvalidEntityToPersistException;
 import com.domytask.catdog.services.exceptions.NotAuthorizeActionException;
@@ -28,7 +28,7 @@ public class TaskServiceImpl implements TaskService {
         if (taskEntity.getTaskId() != null)
             throw new InvalidEntityToPersistException("Id Invalid", "Une adresse avec cet ID existe déjà", localization+" + save");
         taskEntity.setStatus(StatusEnum.TODO);
-        taskEntity.setTaskStage(TaskStageEnum.TWO);
+        taskEntity.setTaskStage(TaskStageEnum.ONE);
         taskRepo.save(taskEntity);
     }
 
@@ -40,12 +40,10 @@ public class TaskServiceImpl implements TaskService {
     }
 
     @Override
-    public TaskEntity taskFulfilment(TaskEntity taskEntity, UserEntity userEntity) throws NotFoundEntityException, NotAuthorizeActionException {
-        /*if (taskEntity.getTaskDoers().get(0).getUserId() != userId )
+    public TaskEntity taskFulfilment(TaskEntity taskEntity, UserEntity userEntity) throws NotAuthorizeActionException {
+        if (taskEntity.getTaskDoers().get(0) != userEntity )
             throw new NotAuthorizeActionException("Utilisateur non authorisé", "L'utilisateur n'est pas authorisé a effectué cette action", "");
 
-         */
-        System.out.println(userEntity.getWallet());
         if(!taskEntity.getStatus().equals(StatusEnum.TODO)){
             throw new NotAuthorizeActionException("Action interdite", "La tache a déjà été effectuée", "");
         }
@@ -71,8 +69,30 @@ public class TaskServiceImpl implements TaskService {
         return taskRepo.save(taskEntity);
     }
 
-    public TaskEntity taskReview(TaskEntity taskEntity) {
-        return null;
+    @Override
+    public List<TaskEntity> getAllTasksAvailableByStage(TaskStageEnum taskStage) {
+        return taskRepo.findAllByAvailableAndTaskStage(true, taskStage);
+    }
+
+    @Override
+    public TaskEntity taskReview(TaskEntity taskEntity, UserEntity userEntity) throws NotAuthorizeActionException {
+        if (taskEntity.getTaskDoers().get(1) != userEntity )
+            throw new NotAuthorizeActionException("Utilisateur non authorisé", "L'utilisateur n'est pas authorisé a effectué cette action", "");
+        Float walletOnHold = taskEntity.getTaskDoers().get(0).getWallet().getOnHold();
+        Float walletAvailable = taskEntity.getTaskDoers().get(0).getWallet().getAvailableBalance();
+        if(taskEntity.getStatus()==StatusEnum.FAIL){
+            taskEntity.getTaskDoers().get(0).getWallet().setOnHold(walletOnHold - taskEntity.getReward());
+        }else {
+            taskEntity.getTaskDoers().get(0).getWallet().setOnHold(walletOnHold - taskEntity.getReward());
+            if(walletAvailable == null) {
+                taskEntity.getTaskDoers().get(0).getWallet().setAvailableBalance(taskEntity.getReward());
+            }else {
+                taskEntity.getTaskDoers().get(0).getWallet().setAvailableBalance(walletAvailable + taskEntity.getReward());
+            }
+        }
+        taskEntity.setReview(true);
+        taskEntity.setTaskStage(TaskStageEnum.THREE);
+        return taskRepo.save(taskEntity);
     }
 
     @Override

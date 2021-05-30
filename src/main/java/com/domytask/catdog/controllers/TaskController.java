@@ -24,7 +24,7 @@ public class TaskController {
     @Autowired
     UserService userService;
 
-    @RequestMapping(value = "/create")
+    @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<Object> create(@RequestBody @Valid TaskEntity taskEntity){
         try{
             taskService.save(taskEntity);
@@ -37,7 +37,7 @@ public class TaskController {
     }
 
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
-    public ResponseEntity<Object> update(@RequestBody @Valid TaskEntity taskEntity){
+    public ResponseEntity<Object> update(@RequestBody TaskEntity taskEntity){
         try{
             return new ResponseEntity<>(taskService.update(taskEntity), HttpStatus.CREATED);
         }catch(NotFoundEntityException e){
@@ -47,8 +47,8 @@ public class TaskController {
         }
     }
 
-    @RequestMapping(value = "/{userId}/evaluation", method = RequestMethod.PUT)
-    public ResponseEntity<Object> taskFulfilment(@RequestBody @Valid TaskEntity taskEntity, @PathVariable long userId){
+    @RequestMapping(value = "/evaluation/{userId}", method = RequestMethod.PUT)
+    public ResponseEntity<Object> taskFulfilment(@RequestBody TaskEntity taskEntity, @PathVariable long userId){
         try{
             UserEntity user = userService.getById(userId);
             TaskEntity task = taskService.getById(taskEntity.getTaskId());
@@ -56,11 +56,29 @@ public class TaskController {
             return new ResponseEntity<>(taskService.taskFulfilment(task, user), HttpStatus.OK);
         }catch (NotFoundEntityException e){
             e.getErrorDto().setStatus(400);
-            e.getErrorDto().setPath(userId+"/evaluation");
+            e.getErrorDto().setPath("/evaluation/"+userId);
             return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
         }catch (NotAuthorizeActionException e){
             e.getErrorDto().setStatus(401);
-            e.getErrorDto().setPath(userId+"/evaluation");
+            e.getErrorDto().setPath("/evaluation/"+userId);
+            return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/review/{userId}", method =  RequestMethod.PUT)
+    public ResponseEntity<Object> review(@RequestBody TaskEntity taskEntity, @PathVariable long userId){
+        try{
+            TaskEntity task = taskService.getById(taskEntity.getTaskId());
+            UserEntity user = userService.getById(userId);
+            task.setStatus(taskEntity.getStatus());
+            return new ResponseEntity<>(taskService.taskReview(task, user), HttpStatus.OK);
+        }catch (NotFoundEntityException e){
+            e.getErrorDto().setStatus(401);
+            e.getErrorDto().setPath(userId+"/review");
+            return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
+        }catch (NotAuthorizeActionException e){
+            e.getErrorDto().setStatus(401);
+            e.getErrorDto().setPath(userId+"/review");
             return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
         }
     }

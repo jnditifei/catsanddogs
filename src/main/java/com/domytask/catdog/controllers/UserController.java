@@ -52,7 +52,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/update", method =  RequestMethod.PUT)
-    public ResponseEntity<Object> update(@RequestBody @Valid UserEntity userEntity){
+    public ResponseEntity<Object> update(@RequestBody UserEntity userEntity){
         try{
             return new ResponseEntity<>(userService.update(userEntity), HttpStatus.OK);
         }catch (NotFoundEntityException e){
@@ -63,7 +63,7 @@ public class UserController {
     }
 
     @RequestMapping(value =  "/reservation/{taskId}", method =  RequestMethod.PUT)
-    public ResponseEntity<Object> taskReservation(@RequestBody @Valid UserEntity userEntity, @PathVariable long taskId){
+    public ResponseEntity<Object> taskReservation(@RequestBody UserEntity userEntity, @PathVariable long taskId){
         try{
             TaskEntity task = taskService.getById(taskId);
             UserEntity user = userService.getById(userEntity.getUserId());

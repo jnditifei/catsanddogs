@@ -22,6 +22,7 @@ public class UserEntity {
     private Long userId;
 
     @NotNull
+    @Column(unique = true)
     private String userName;
 
     @Column(unique = true)
@@ -64,4 +65,5 @@ public class UserEntity {
                 ", role=" + role +
                 '}';
     }
+
 }

@@ -14,7 +14,9 @@ public enum StatusEnum {
     @JsonProperty("Hold")
     HOLD("Hold"),
     @JsonProperty("Release")
-    RELEASE("Release");
+    RELEASE("Release"),
+    @JsonProperty("Fail")
+    FAIL("Fail");
 
     private String name;
 
