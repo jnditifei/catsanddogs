@@ -107,6 +107,10 @@ public class TaskServiceImpl implements TaskService {
         return taskRepo.findAll();
     }
 
+    public List<TaskEntity> getAllAvailableTasksByStage(TaskStageEnum taskStage){
+        return taskRepo.findAllByAvailableAndTaskStage(true, taskStage);
+    }
+
     @Override
     public void delete(Long userId) throws NotFoundEntityException {
         if(!taskRepo.findById(userId).isPresent())

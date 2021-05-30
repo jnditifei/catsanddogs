@@ -2,6 +2,8 @@ package com.domytask.catdog.controllers;
 
 import com.domytask.catdog.entities.TaskEntity;
 import com.domytask.catdog.entities.UserEntity;
+import com.domytask.catdog.entities.enums.RoleEnum;
+import com.domytask.catdog.entities.enums.TaskStageEnum;
 import com.domytask.catdog.services.TaskService;
 import com.domytask.catdog.services.UserService;
 import com.domytask.catdog.services.exceptions.InvalidEntityToPersistException;
@@ -101,6 +103,22 @@ public class TaskController {
         }catch (NotFoundEntityException e){
             e.getErrorDto().setStatus(400);
             e.getErrorDto().setPath("/all");
+            return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @RequestMapping(value = "/allavailable/{userId}", method = RequestMethod.GET)
+    public ResponseEntity<Object> allAvailableForUser(@PathVariable Long userId){
+        try {
+            UserEntity user = userService.getById(userId);
+            if (user.getRole().equals(RoleEnum.ENTRY)) {
+                return new ResponseEntity<>(taskService.getAllTasksAvailableByStage(TaskStageEnum.ONE), HttpStatus.OK);
+            }else{
+                return new ResponseEntity<>(taskService.getAllTasksAvailableByStage(TaskStageEnum.TWO), HttpStatus.OK);
+            }
+        }catch (NotFoundEntityException e){
+            e.getErrorDto().setStatus(400);
+            e.getErrorDto().setPath("/allAvailableForUser");
             return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
         }
     }
