@@ -4,7 +4,6 @@ import com.domytask.catdog.entities.enums.PetsEnum;
 import com.domytask.catdog.entities.enums.StatusEnum;
 import com.domytask.catdog.entities.enums.TaskStageEnum;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -50,10 +49,18 @@ public class TaskEntity {
     @JsonBackReference
     private List<UserEntity> taskDoers;
 
-    public TaskEntity(Boolean available, String imageURl, Float reward, StatusEnum status) {
+    public TaskEntity(Boolean available, String imageURL, Float reward, StatusEnum status) {
+        this.available = available;
+        this.imageURL = imageURL;
+        this.reward = reward;
+        this.status = status;
+    }
+
+    public TaskEntity(Boolean available, String imageURl, Float reward, StatusEnum status, TaskStageEnum taskStage) {
         this.available = available;
         this.imageURL = imageURl;
         this.reward = reward;
         this.status = status;
+        this.taskStage = taskStage;
     }
 }

@@ -1,0 +1,131 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Catsanddogs",
+		"_postman_id": "38be2204-a2ab-19ea-0dd6-aa5b803ed3d1",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "http://localhost:9094/user/reservation/1",
+			"request": {
+				"url": "http://localhost:9094/user/reservation/{taskid}",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"userId\":1\n\t\n}"
+				},
+				"description": "Reservation"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9094/task/evaluation/{userid}",
+			"request": {
+				"url": "http://localhost:9094/task/evaluation/{userid}",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"taskId\":2,\n\t\"answer\":\"Cat\"\n}"
+				},
+				"description": "Answer values: Cat/Dog\n"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9094/user/login",
+			"request": {
+				"url": "http://localhost:9094/user/login",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"email\":\"juju@test.com\",\n\t\"password\":\"2382\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9094/task/review/{userid}",
+			"request": {
+				"url": "http://localhost:9094/task/review/{userid}",
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"taskId\":2,\n\t\"status\":\"Release\"\n}"
+				},
+				"description": "status value: Release or Fail"
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9094/task/create",
+			"request": {
+				"url": "http://localhost:9094/task/create",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"available\": true,\n\t\"imageURL\": \"https://www.fondationbrigittebardot.fr/wp-content/uploads/2020/03/confinement-consequences-chiens-hd-1000x500.jpg\",\n\t\"reward\":\"100\",\n\t\"status\": \"To do\",\n\t\"taskStage\": \"Stage 1\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "http://localhost:9094/user/register",
+			"request": {
+				"url": "http://localhost:9094/user/register",
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"userName\": \"Kovac\",\n\t\"email\": \"takeshikovac@test.com\",\n\t\"password\":\"2384\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
