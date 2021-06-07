@@ -2,7 +2,6 @@ package com.domytask.catdog.services.implementations;
 
 import com.domytask.catdog.entities.TaskEntity;
 import com.domytask.catdog.entities.UserEntity;
-import com.domytask.catdog.entities.WalletEntity;
 import com.domytask.catdog.entities.enums.StatusEnum;
 import com.domytask.catdog.entities.enums.TaskStageEnum;
 import com.domytask.catdog.repositories.TaskRepository;

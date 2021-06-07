@@ -36,7 +36,7 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinTable(name="reservedBy",
             joinColumns= @JoinColumn(name="user_id"),
             inverseJoinColumns = @JoinColumn(name = "task_id"))
