@@ -19,9 +19,7 @@ public class TaskServiceImpl implements TaskService {
 
     @Autowired
     TaskRepository taskRepo;
-
     String localization = "TaskImplementation";
-    
     @Override
     public TaskEntity save(TaskEntity taskEntity) throws InvalidEntityToPersistException {
         if (taskEntity.getTaskId() != null)
@@ -30,14 +28,12 @@ public class TaskServiceImpl implements TaskService {
         taskEntity.setTaskStage(TaskStageEnum.ONE);
         return taskRepo.save(taskEntity);
     }
-
     @Override
     public TaskEntity update(TaskEntity taskEntity) throws NotFoundEntityException {
         if (!taskRepo.findById(taskEntity.getTaskId()).isPresent())
             throw new NotFoundEntityException("Id Invalide", "L'object n'existe pas", "");
         return taskRepo.save(taskEntity);
     }
-
     @Override
     public TaskEntity taskFulfilment(TaskEntity taskEntity, UserEntity userEntity) throws NotAuthorizeActionException {
         if (taskEntity.getTaskDoers().get(0) != userEntity )
@@ -67,12 +63,10 @@ public class TaskServiceImpl implements TaskService {
         taskEntity.setReview(false);
         return taskRepo.save(taskEntity);
     }
-
     @Override
     public List<TaskEntity> getAllTasksAvailableByStage(TaskStageEnum taskStage) {
         return taskRepo.findAllByAvailableAndTaskStage(true, taskStage);
     }
-
     @Override
     public TaskEntity taskReview(TaskEntity taskEntity, UserEntity userEntity) throws NotAuthorizeActionException {
         if (taskEntity.getTaskDoers().get(1) != userEntity )
@@ -93,14 +87,12 @@ public class TaskServiceImpl implements TaskService {
         taskEntity.setTaskStage(TaskStageEnum.THREE);
         return taskRepo.save(taskEntity);
     }
-
     @Override
     public TaskEntity getById(Long userId) throws NotFoundEntityException {
         if(!taskRepo.findById(userId).isPresent())
             throw new NotFoundEntityException("Id invalide", "La tache n'existe pas", "");
         return taskRepo.findById(userId).get();
     }
-
     @Override
     public List<TaskEntity> all() throws NotFoundEntityException {
         return taskRepo.findAll();
@@ -109,14 +101,12 @@ public class TaskServiceImpl implements TaskService {
     public List<TaskEntity> getAllAvailableTasksByStage(TaskStageEnum taskStage){
         return taskRepo.findAllByAvailableAndTaskStage(true, taskStage);
     }
-
     @Override
     public void delete(Long userId) throws NotFoundEntityException {
         if(!taskRepo.findById(userId).isPresent())
             throw new NotFoundEntityException("Id invalide", "L'objet n'existe pas", "");
         taskRepo.deleteById(userId);
     }
-
     /**
      * Return a random number in a range between min and max value
      * @param min

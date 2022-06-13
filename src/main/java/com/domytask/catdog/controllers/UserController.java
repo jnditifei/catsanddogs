@@ -20,13 +20,10 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(value = "/user")
 public class UserController {
-
     @Autowired
     UserService userService;
-
     @Autowired
     TaskService taskService;
-
     @RequestMapping(value = "/register", method = RequestMethod.POST)
     public ResponseEntity<Object> register(@RequestBody @Valid UserEntity userEntity){
         try{
@@ -39,7 +36,6 @@ public class UserController {
             return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
         }
     }
-
     @RequestMapping(value = "/modo/register", method =  RequestMethod.POST)
     public ResponseEntity<Object> registerModo(@RequestBody @Valid UserEntity userEntity){
         try{
@@ -52,7 +48,6 @@ public class UserController {
             return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
         }
     }
-
     @RequestMapping(value = "/login", method = RequestMethod.POST)
     public ResponseEntity<Object> loginController(@RequestBody UserEntity user,
                                                   HttpServletResponse response){
@@ -68,7 +63,6 @@ public class UserController {
             return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
         }
     }
-
     @RequestMapping(value = "/update", method =  RequestMethod.PUT)
     public ResponseEntity<Object> update(@RequestBody UserEntity userEntity){
         try{
@@ -79,7 +73,6 @@ public class UserController {
             return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
         }
     }
-
     @RequestMapping(value =  "/reservation/{taskId}", method =  RequestMethod.PUT)
     public ResponseEntity<Object> taskReservation(@RequestBody UserEntity userEntity, @PathVariable long taskId){
         try{
@@ -96,7 +89,6 @@ public class UserController {
             return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
         }
     }
-
     @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
     public ResponseEntity<Object> getUser(@PathVariable long userId){
         try {
@@ -107,7 +99,6 @@ public class UserController {
             return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
         }
     }
-
     @RequestMapping(value = "/delete/{userId}", method =  RequestMethod.DELETE)
     public ResponseEntity<Object> delete(@PathVariable long userId){
         try{

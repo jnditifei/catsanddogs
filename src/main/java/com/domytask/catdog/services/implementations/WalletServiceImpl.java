@@ -15,27 +15,22 @@ public class WalletServiceImpl implements WalletService {
 
     @Autowired
     WalletRepository walletRepo;
-
     @Override
     public WalletEntity save(WalletEntity walletEntity) throws InvalidEntityToPersistException {
         return  null;
     }
-
     @Override
     public WalletEntity update(WalletEntity walletEntity) throws NotFoundEntityException {
         return null;
     }
-
     @Override
     public WalletEntity getById(Long userId) throws NotFoundEntityException {
         return null;
     }
-
     @Override
     public List<WalletEntity> all() throws NotFoundEntityException {
         return null;
     }
-
     @Override
     public void delete(Long userId) throws NotFoundEntityException {
 

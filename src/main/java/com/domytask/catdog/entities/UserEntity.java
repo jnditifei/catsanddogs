@@ -16,23 +16,18 @@ import java.util.List;
 @NoArgsConstructor
 @Entity
 public class UserEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
-
     @NotNull
     @Column(unique = true)
     private String userName;
-
     @Column(unique = true)
     @NotNull
     @Pattern(message = "L'email n'est pas valide", regexp = "[^@]+@[^@]+")
     private String email;
-
     @NotNull
     private String password;
-
     @Enumerated(EnumType.STRING)
     private RoleEnum role;
 
@@ -41,12 +36,10 @@ public class UserEntity {
             joinColumns= @JoinColumn(name="user_id"),
             inverseJoinColumns = @JoinColumn(name = "task_id"))
     List<TaskEntity> reservedTask;
-
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name= "walletId")
     @JsonManagedReference
     private WalletEntity wallet;
-
     public UserEntity(String userName, String email, String password, RoleEnum role, WalletEntity wallet) {
         this.userName = userName;
         this.email = email;
@@ -54,7 +47,6 @@ public class UserEntity {
         this.role = role;
         this.wallet = wallet;
     }
-
     @Override
     public String toString() {
         return "UserEntity{" +

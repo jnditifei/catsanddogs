@@ -4,9 +4,7 @@ import com.domytask.catdog.services.exceptions.InvalidEntityToPersistException;
 import com.domytask.catdog.services.exceptions.NotFoundEntityException;
 
 import java.util.List;
-
 public interface GenericService<Entity, ID> {
-
     Entity save(Entity entity) throws InvalidEntityToPersistException;
     Entity update(Entity entity) throws NotFoundEntityException;
     Entity getById(ID userId) throws  NotFoundEntityException;

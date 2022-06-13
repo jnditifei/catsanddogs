@@ -7,7 +7,6 @@ import com.domytask.catdog.services.exceptions.NotAuthorizeActionException;
 import com.domytask.catdog.services.exceptions.NotFoundEntityException;
 
 import java.util.List;
-
 public interface TaskService extends GenericService<TaskEntity, Long> {
     TaskEntity taskFulfilment(TaskEntity taskEntity, UserEntity userEntity) throws NotFoundEntityException, NotAuthorizeActionException;
 

@@ -18,15 +18,11 @@ import java.util.List;
 
 @Service
 public class UserServiceImpl implements UserService {
-
     @Autowired
     UserRepository userRepo;
-
     @Autowired
     WalletRepository walletRepo;
-
     String localisation = "userImpl";
-
     @Override
     public UserEntity save(UserEntity userEntity) throws InvalidEntityToPersistException {
         if(userEntity.getUserId() != null)
@@ -40,7 +36,6 @@ public class UserServiceImpl implements UserService {
             return userRepo.save(userEntity);
         }
     }
-
     @Override
     public UserEntity login(String email, String password) throws NotFoundEntityException {
         if(userRepo.findByEmailAndPassword(email, password)==null)
@@ -48,14 +43,12 @@ public class UserServiceImpl implements UserService {
         UserEntity user = userRepo.findByEmailAndPassword(email, password);
         return user;
     }
-
     @Override
     public UserEntity update(UserEntity userEntity) throws NotFoundEntityException {
         if(!userRepo.findById(userEntity.getUserId()).isPresent())
             throw new NotFoundEntityException("Id Invalide", "L'objet n'existe pas", "");
         return userRepo.save(userEntity);
     }
-
     @Override
     public UserEntity taskReservation(TaskEntity taskEntity, UserEntity userEntity) throws NotFoundEntityException, NotAuthorizeActionException {
         if(!userRepo.findById(userEntity.getUserId()).isPresent())
@@ -75,12 +68,10 @@ public class UserServiceImpl implements UserService {
             throw new NotFoundEntityException("Id invalide", "Aucun utilisateur", "");
         return userRepo.findById(userId).get();
     }
-
     @Override
     public List<UserEntity> all() throws NotFoundEntityException {
         return null;
     }
-
     @Override
     public void delete(Long userId) throws NotFoundEntityException {
         if(!userRepo.findById(userId).isPresent())

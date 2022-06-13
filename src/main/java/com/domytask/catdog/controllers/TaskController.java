@@ -19,13 +19,10 @@ import javax.validation.Valid;
 @RestController
 @RequestMapping(value = "/task")
 public class TaskController {
-
     @Autowired
     TaskService taskService;
-
     @Autowired
     UserService userService;
-
     @RequestMapping(value = "/create", method = RequestMethod.POST)
     public ResponseEntity<Object> create(@RequestBody @Valid TaskEntity taskEntity){
         try{
@@ -37,7 +34,6 @@ public class TaskController {
             return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
         }
     }
-
     @RequestMapping(value = "/update", method = RequestMethod.PUT)
     public ResponseEntity<Object> update(@RequestBody TaskEntity taskEntity){
         try{
@@ -48,7 +44,6 @@ public class TaskController {
             return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
         }
     }
-
     @RequestMapping(value = "/evaluation/{userId}", method = RequestMethod.PUT)
     public ResponseEntity<Object> taskFulfilment(@RequestBody TaskEntity taskEntity, @PathVariable long userId){
         try{
@@ -66,7 +61,6 @@ public class TaskController {
             return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
         }
     }
-
     @RequestMapping(value = "/review/{userId}", method =  RequestMethod.PUT)
     public ResponseEntity<Object> review(@RequestBody TaskEntity taskEntity, @PathVariable long userId){
         try{
@@ -84,7 +78,6 @@ public class TaskController {
             return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
         }
     }
-
     @RequestMapping(value = "/{taskId}", method = RequestMethod.GET)
     public ResponseEntity<Object> getById(@PathVariable long taskId){
         try{
@@ -106,7 +99,6 @@ public class TaskController {
             return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
         }
     }
-
     @RequestMapping(value = "/allavailable/{userId}", method = RequestMethod.GET)
     public ResponseEntity<Object> allAvailableForUser(@PathVariable Long userId){
         try {
@@ -122,7 +114,6 @@ public class TaskController {
             return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
         }
     }
-
     @RequestMapping(value = "/delete/{taskId}", method = RequestMethod.DELETE)
     public ResponseEntity<Object> delete(@PathVariable long taskId){
         try{
