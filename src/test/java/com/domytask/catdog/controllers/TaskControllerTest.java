@@ -57,10 +57,8 @@ class TaskControllerTest {
     void createInvalidEntity() throws InvalidEntityToPersistException {
         InvalidEntityToPersistException e = new InvalidEntityToPersistException("","","");
         doThrow(e).when(taskService).save(any(TaskEntity.class));
-        ResponseEntity response = taskController.create(
-                new TaskEntity(true, "url", 0.00F, StatusEnum.TODO));
-        assertTrue(response.getBody().equals(e.getErrorDto()));
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
+        assertThrows(InvalidEntityToPersistException.class, ()-> taskController.create(
+                new TaskEntity(true, "url", 0.00F, StatusEnum.TODO)));
     }
 
     @Test
@@ -78,9 +76,8 @@ class TaskControllerTest {
     void updateNotFound() throws NotFoundEntityException {
         NotFoundEntityException e = new NotFoundEntityException("","","");
         doThrow(e).when(taskService).update(any(TaskEntity.class));
-        ResponseEntity response = taskController.update(
-                new TaskEntity(true, "url", 0.00F, StatusEnum.TODO));
-        assertTrue(response.getBody().equals(e.getErrorDto()));
+        assertThrows(NotFoundEntityException.class, () -> taskController.update(
+                new TaskEntity(true, "url", 0.00F, StatusEnum.TODO)));
     }
 
     @Test
@@ -110,8 +107,7 @@ class TaskControllerTest {
         doThrow(e).when(taskService).taskFulfilment(any(TaskEntity.class), any(UserEntity.class));
         task.setTaskId(1L);
         task.setAnswer(PetsEnum.CAT);
-        ResponseEntity response = taskController.taskFulfilment(task, 1L);
-        assertTrue(response.getBody().equals(e.getErrorDto()));
+        assertThrows(NotFoundEntityException.class, () -> taskController.taskFulfilment(task, 1L));
     }
 
     @Test
@@ -124,8 +120,7 @@ class TaskControllerTest {
         doThrow(e).when(taskService).taskFulfilment(any(TaskEntity.class), any(UserEntity.class));
         task.setTaskId(1L);
         task.setAnswer(PetsEnum.CAT);
-        ResponseEntity response = taskController.taskFulfilment(task, 1L);
-        assertTrue(response.getBody().equals(e.getErrorDto()));
+        assertThrows(NotAuthorizeActionException.class, ()-> taskController.taskFulfilment(task, 1L));
     }
 
     @Test
@@ -172,9 +167,7 @@ class TaskControllerTest {
     void getByIdNotFound() throws NotFoundEntityException {
         NotFoundEntityException e = new NotFoundEntityException("Id Invalid", "", "");
         doThrow(e).when(taskService).getById(any(Long.class));
-        ResponseEntity response = taskController.getById(1L);
-        assertEquals(HttpStatus.BAD_REQUEST, response.getStatusCode());
-        assertTrue(response.getBody().equals(e.getErrorDto()));
+        assertThrows(NotFoundEntityException.class, ()-> taskController.getById(1L));
     }
 
     @Test
@@ -207,7 +200,6 @@ class TaskControllerTest {
     void deleteNotFound() throws NotFoundEntityException {
         NotFoundEntityException e = new NotFoundEntityException("ID invalid", "", "");
         doThrow(e).when(taskService).delete(anyLong());
-        assertEquals(HttpStatus.BAD_REQUEST, taskController.delete(1L).getStatusCode());
-        verify(taskService, times(1)).delete(anyLong());
+        assertThrows(NotFoundEntityException.class, ()-> taskController.delete(1L).getStatusCode());
     }
 }
