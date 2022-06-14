@@ -5,16 +5,17 @@ import com.domytask.catdog.repositories.WalletRepository;
 import com.domytask.catdog.services.WalletService;
 import com.domytask.catdog.services.exceptions.InvalidEntityToPersistException;
 import com.domytask.catdog.services.exceptions.NotFoundEntityException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class WalletServiceImpl implements WalletService {
 
-    @Autowired
-    WalletRepository walletRepo;
+    private final WalletRepository walletRepo;
     @Override
     public WalletEntity save(WalletEntity walletEntity) throws InvalidEntityToPersistException {
         return  null;

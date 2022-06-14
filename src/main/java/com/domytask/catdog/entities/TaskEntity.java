@@ -4,6 +4,7 @@ import com.domytask.catdog.entities.enums.PetsEnum;
 import com.domytask.catdog.entities.enums.StatusEnum;
 import com.domytask.catdog.entities.enums.TaskStageEnum;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -13,8 +14,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 
-@Setter
-@Getter
+@Data
 @NoArgsConstructor
 @Entity
 public class TaskEntity {

@@ -9,17 +9,18 @@ import com.domytask.catdog.services.TaskService;
 import com.domytask.catdog.services.exceptions.InvalidEntityToPersistException;
 import com.domytask.catdog.services.exceptions.NotAuthorizeActionException;
 import com.domytask.catdog.services.exceptions.NotFoundEntityException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class TaskServiceImpl implements TaskService {
 
-    @Autowired
-    TaskRepository taskRepo;
-    String localization = "TaskImplementation";
+    private final TaskRepository taskRepo;
+    private String localization = "TaskImplementation";
     @Override
     public TaskEntity save(TaskEntity taskEntity) throws InvalidEntityToPersistException {
         if (taskEntity.getTaskId() != null)

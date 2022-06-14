@@ -30,11 +30,11 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class TaskServiceImplTest {
 
-    @InjectMocks
-    TaskService taskService = new TaskServiceImpl();
-
     @Mock
     TaskRepository taskRepo;
+
+    @InjectMocks
+    TaskServiceImpl taskService;
 
     @Test
     void save() throws InvalidEntityToPersistException {

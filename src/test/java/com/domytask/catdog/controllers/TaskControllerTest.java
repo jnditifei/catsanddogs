@@ -14,8 +14,10 @@ import com.domytask.catdog.services.exceptions.NotAuthorizeActionException;
 import com.domytask.catdog.services.exceptions.NotFoundEntityException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -29,6 +31,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+@ExtendWith(MockitoExtension.class)
 class TaskControllerTest {
 
     @Mock
@@ -38,12 +41,7 @@ class TaskControllerTest {
     UserService userService;
 
     @InjectMocks
-    TaskController taskController = new TaskController();
-
-    @BeforeEach
-    void setup(){
-        initMocks(this);
-    }
+    TaskController taskController;
 
     @Test
     void create() throws InvalidEntityToPersistException {

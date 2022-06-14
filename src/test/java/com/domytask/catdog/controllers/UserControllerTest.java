@@ -13,8 +13,10 @@ import com.domytask.catdog.services.exceptions.NotAuthorizeActionException;
 import com.domytask.catdog.services.exceptions.NotFoundEntityException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -25,6 +27,7 @@ import static org.mockito.Mockito.*;
 import static org.mockito.Mockito.times;
 import static org.mockito.MockitoAnnotations.initMocks;
 
+@ExtendWith(MockitoExtension.class)
 class UserControllerTest {
 
     @Mock
@@ -34,12 +37,7 @@ class UserControllerTest {
     UserService userService;
 
     @InjectMocks
-    UserController userController = new UserController();
-
-    @BeforeEach
-    void setup(){
-        initMocks(this);
-    }
+    UserController userController;
 
     @Test
     void register() throws InvalidEntityToPersistException {

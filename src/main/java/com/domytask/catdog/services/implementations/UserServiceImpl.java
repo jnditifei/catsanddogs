@@ -11,17 +11,17 @@ import com.domytask.catdog.services.UserService;
 import com.domytask.catdog.services.exceptions.InvalidEntityToPersistException;
 import com.domytask.catdog.services.exceptions.NotAuthorizeActionException;
 import com.domytask.catdog.services.exceptions.NotFoundEntityException;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
-    @Autowired
-    UserRepository userRepo;
-    @Autowired
-    WalletRepository walletRepo;
+    private final UserRepository userRepo;
+    private final WalletRepository walletRepo;
     String localisation = "userImpl";
     @Override
     public UserEntity save(UserEntity userEntity) throws InvalidEntityToPersistException {

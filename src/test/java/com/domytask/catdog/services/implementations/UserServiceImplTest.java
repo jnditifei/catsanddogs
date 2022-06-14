@@ -32,15 +32,14 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
 
-    @InjectMocks
-    private UserService userService = new UserServiceImpl();
-
     @Mock
     UserRepository userRepo;
 
     @Mock
     WalletRepository walletRepo;
 
+    @InjectMocks
+    private UserServiceImpl userService;
 
     @Test
     void save() throws InvalidEntityToPersistException {

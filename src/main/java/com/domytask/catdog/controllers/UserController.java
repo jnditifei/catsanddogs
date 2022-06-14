@@ -8,7 +8,8 @@ import com.domytask.catdog.services.UserService;
 import com.domytask.catdog.services.exceptions.InvalidEntityToPersistException;
 import com.domytask.catdog.services.exceptions.NotAuthorizeActionException;
 import com.domytask.catdog.services.exceptions.NotFoundEntityException;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +20,11 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping(value = "/user")
+@RequiredArgsConstructor
 public class UserController {
-    @Autowired
-    UserService userService;
-    @Autowired
-    TaskService taskService;
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    private final UserService userService;
+    private final TaskService taskService;
+    @PostMapping(value = "/register")
     public ResponseEntity<Object> register(@RequestBody @Valid UserEntity userEntity){
         try{
             userEntity.setRole(RoleEnum.ENTRY);
@@ -36,7 +36,7 @@ public class UserController {
             return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value = "/modo/register", method =  RequestMethod.POST)
+    @PostMapping(value = "/modo/register")
     public ResponseEntity<Object> registerModo(@RequestBody @Valid UserEntity userEntity){
         try{
             userEntity.setRole(RoleEnum.MODERATOR);
@@ -48,7 +48,7 @@ public class UserController {
             return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value = "/login", method = RequestMethod.POST)
+    @PostMapping(value = "/login")
     public ResponseEntity<Object> loginController(@RequestBody UserEntity user,
                                                   HttpServletResponse response){
         try{
@@ -63,7 +63,7 @@ public class UserController {
             return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value = "/update", method =  RequestMethod.PUT)
+    @PutMapping(value = "/update")
     public ResponseEntity<Object> update(@RequestBody UserEntity userEntity){
         try{
             return new ResponseEntity<>(userService.update(userEntity), HttpStatus.OK);
@@ -73,7 +73,7 @@ public class UserController {
             return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value =  "/reservation/{taskId}", method =  RequestMethod.PUT)
+    @PutMapping(value =  "/reservation/{taskId}")
     public ResponseEntity<Object> taskReservation(@RequestBody UserEntity userEntity, @PathVariable long taskId){
         try{
             TaskEntity task = taskService.getById(taskId);
@@ -89,7 +89,7 @@ public class UserController {
             return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value = "/{userId}", method = RequestMethod.GET)
+    @GetMapping(value = "/{userId}")
     public ResponseEntity<Object> getUser(@PathVariable long userId){
         try {
             return new ResponseEntity<>(userService.getById(userId), HttpStatus.OK);
@@ -99,7 +99,7 @@ public class UserController {
             return new ResponseEntity<>(e.getErrorDto(), HttpStatus.BAD_REQUEST);
         }
     }
-    @RequestMapping(value = "/delete/{userId}", method =  RequestMethod.DELETE)
+    @DeleteMapping(value = "/delete/{userId}")
     public ResponseEntity<Object> delete(@PathVariable long userId){
         try{
             userService.delete(userId);
